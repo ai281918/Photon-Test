@@ -1,39 +1,43 @@
 ﻿using UnityEngine;
 using System.Collections;
- 
-public class PhotonManager : Photon.PunBehaviour {
-    public static PhotonManager instance;
- 
-    void Awake()
-    {
-        if(instance != null)
-        {
-            DestroyImmediate(gameObject);
-            return;
-        }
-        DontDestroyOnLoad(gameObject);
-        instance = this;
-    }
+using System;
+
+public class PhotonManager : MonoBehaviour {
+	
+	public GameObject avatar;
 
 	void Start () {
         PhotonNetwork.ConnectUsingSettings("TanksPUN_v1.0");
+		var tmp = PhotonVoiceNetwork.Client;
     }
 
-	public void JoinGameRoom()
+	public virtual void OnConnectedToMaster()
 	{
-		RoomOptions options = new RoomOptions();
-		options.MaxPlayers = 4;
-		PhotonNetwork.JoinOrCreateRoom("Fighting Room", options, null);
+		Debug.Log("OnConnectedToMaster");
+		PhotonNetwork.JoinRandomRoom();
 	}
 
-	public override void OnJoinedRoom()
+	public virtual void OnJoinedLobby()
 	{
-		Debug.Log("您已進入遊戲室!!");
-		// 如果是Master Client, 即可建立/初始化,與載入遊戲場景
-		if (PhotonNetwork.isMasterClient)
-		{
-			Debug.Log("I am master client");
-			// PhotonNetwork.LoadLevel("GameRoomScene");
-		}
+		Debug.Log("OnJoinedLobby");
+		PhotonNetwork.JoinRandomRoom();
 	}
+
+	public virtual void OnPhotonRandomJoinFailed()
+	{
+		Debug.Log("OnPhotonRandomJoinFailed");
+		PhotonNetwork.CreateRoom(null, new RoomOptions(){MaxPlayers = 4}, null);
+	}
+
+	public virtual void OnfailedToConnectToPhoton(DisconnectCause cause)
+	{
+		Debug.LogError(cause);
+	}
+
+	public void OnJoinedRoom()
+	{
+		Debug.Log("OnJoinedRoom");
+		GameObject go = PhotonNetwork.Instantiate(avatar.name, Vector3.zero, Quaternion.identity, 0);
+	}
+
 }

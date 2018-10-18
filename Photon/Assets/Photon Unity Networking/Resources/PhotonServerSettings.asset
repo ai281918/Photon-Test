@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Name: PhotonServerSettings
   m_EditorClassIdentifier: 
   AppID: b89c2175-9b4a-463b-9038-9859e12d203d
-  VoiceAppID: 
+  VoiceAppID: f24f66bb-d759-4590-94ed-dfbbc1bfeaf4
   ChatAppID: 
   HostType: 1
   PreferredRegion: 3
@@ -42,4 +42,5 @@ MonoBehaviour:
   - RequestForPickupItems
   - RequestForPickupTimes
   - TaggedPlayer
+  - BroadCast
   DisableAutoOpenWizard: 1
